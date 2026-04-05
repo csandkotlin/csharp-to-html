@@ -1,40 +1,37 @@
-name: Build C# to HTML CLI
+name: Build
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        dotnet-version: ['6.0.x', '7.0.x', '8.0.x']
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: Setup .NET ${{ matrix.dotnet-version }}
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: '8.0.x'
     
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Build
+      run: |
+        cd src
+        dotnet build main.csproj --configuration Release
     
-    - name: Build project
-      run: dotnet build --configuration Release --no-restore
-    
-    - name: Publish artifact
-      run: dotnet publish --configuration Release --output ./publish
-    
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: csharp-to-html-cli-${{ matrix.dotnet-version }}
-        path: ./publish/
-        retention-days: 7
+    - name: Test CLI
+      run: |
+        cd src
+        echo 'class Test { static void Main() { System.Console.WriteLine("Hello"); } }' > temp.cs
+        dotnet run --project main.csproj -- /convert temp.cs
+        if [ -f "temp.html" ]; then
+          echo "✅ CLI works!"
+          ls -la temp.html
+        else
+          echo "❌ CLI failed"
+          exit 1
+        fi
