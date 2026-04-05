@@ -1,7 +1,12 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+
+#if NET472
 using System.Web;
+#else
+using System.Net;
+#endif
 
 namespace CSharpToHtmlCli
 {
@@ -56,10 +61,19 @@ namespace CSharpToHtmlCli
             Console.WriteLine("  /convert Program.cs");
         }
 
+        static string EscapeHtml(string text)
+        {
+#if NET472
+            return HttpUtility.HtmlEncode(text);
+#else
+            return WebUtility.HtmlEncode(text);
+#endif
+        }
+
         static string ConvertToHtml(string code)
         {
             // Escape HTML entities
-            code = HttpUtility.HtmlEncode(code);
+            code = EscapeHtml(code);
             
             // Tô màu keywords
             string[] keywords = {
