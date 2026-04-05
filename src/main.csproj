@@ -1,50 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Cấu hình cơ bản -->
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>12.0</LangVersion>
-    
-    <!-- Tên file output -->
+    <LangVersion>latest</LangVersion>
     <AssemblyName>CSharpToHtmlCli</AssemblyName>
     <RootNamespace>CSharpToHtmlCli</RootNamespace>
-    
-    <!-- Tắt Nullable để tương thích code cũ -->
     <Nullable>disable</Nullable>
-    
-    <!-- Encoding -->
-    <Encoding>UTF-8</Encoding>
-    
-    <!-- Platform -->
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    
-    <!-- Debug -->
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    
-    <!-- Optimize -->
-    <Optimize>false</Optimize>
-    
-    <!-- Startup object -->
-    <StartupObject>CSharpToHtmlCli.Program</StartupObject>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <Optimize>true</Optimize>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <!-- Package tham khảo cho .NET Core -->
-  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-  </ItemGroup>
-
-  <!-- Tham khảo cho .NET Framework -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="System.Web" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
 
 </Project>
